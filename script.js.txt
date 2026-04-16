@@ -1,0 +1,115 @@
+class CropDoctor {
+    constructor() {
+        this.classes = ['Early Blight', 'Late Blight', 'Healthy', 'Leaf Mold', 'Septoria'];
+        this.treatments = {
+            'Early Blight': 'फफूंद नाशक दवा (Copper) 7-10 दिन में छिड़कें। संक्रमित पत्तियाँ काटें। हवा का प्रवाह बढ़ाएं।',
+            'Late Blight': 'तुरंत फफूंद नाशक (Mancozeb) छिड़कें। संक्रमित पौधे नष्ट करें। ऊपर से पानी न दें।',
+            'Healthy': 'आपका पौधा स्वस्थ है! नियमित पानी और खाद दें। बधाई! 🌱',
+            'Leaf Mold': 'हवा का प्रवाह बढ़ाएं। पोटैशियम बाइकार्बोनेट छिड़कें। निचली पत्तियाँ हटाएं।',
+            'Septoria': 'Captan फफूंद नाशक छिड़कें। संक्रमित पत्तियाँ हटाएं। पौधे के तने पर पानी दें।'
+        };
+        this.init();
+    }
+
+    init() {
+        this.bindEvents();
+    }
+
+    bindEvents() {
+        document.getElementById('uploadArea').addEventListener('click', () => 
+            document.getElementById('imageInput').click()
+        );
+
+        document.getElementById('imageInput').addEventListener('change', (e) => 
+            this.showPreview(e.target.files[0])
+        );
+
+        document.getElementById('predictBtn').addEventListener('click', () => 
+            this.predict()
+        );
+
+        document.getElementById('removeImage').addEventListener('click', () => 
+            this.reset()
+        );
+
+        document.getElementById('newBtn').addEventListener('click', () => 
+            this.reset()
+        );
+
+        document.getElementById('speakBtn').addEventListener('click', () => 
+            this.speak()
+        );
+
+        // Drag Drop
+        const uploadArea = document.getElementById('uploadArea');
+        ['dragover', 'dragenter'].forEach(event => 
+            uploadArea.addEventListener(event, e => {
+                e.preventDefault(); uploadArea.classList.add('dragover');
+            })
+        );
+        ['dragleave', 'drop'].forEach(event => 
+            uploadArea.addEventListener(event, () => uploadArea.classList.remove('dragover'))
+        );
+        uploadArea.addEventListener('drop', e => {
+            e.preventDefault(); this.showPreview(e.dataTransfer.files[0]);
+        });
+    }
+
+    showPreview(file) {
+        if (!file?.type.startsWith('image/')) return alert('Image file चुनें!');
+        
+        const reader = new FileReader();
+        reader.onload = e => {
+            document.getElementById('previewImg').src = e.target.result;
+            document.getElementById('imagePreview').style.display = 'block';
+            document.getElementById('uploadArea').style.display = 'none';
+            document.getElementById('predictBtn').disabled = false;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    async predict() {
+        const btn = document.getElementById('predictBtn');
+        const spinner = document.getElementById('spinner');
+        const text = btn.querySelector('span');
+        
+        btn.disabled = true;
+        text.style.display = 'none';
+        spinner.style.display = 'inline-block';
+
+        // 3 Second Realistic Loading + Demo Result
+        setTimeout(() => {
+            const predictions = [0.1, 0.82, 0.03, 0.04, 0.01];
+            const maxIdx = predictions.indexOf(Math.max(...predictions));
+            
+            document.getElementById('diseaseName').textContent = this.classes[maxIdx];
+            document.getElementById('confidence').textContent = (predictions[maxIdx]*100).toFixed(1) + '%';
+            document.getElementById('treatmentText').textContent = this.treatments[this.classes[maxIdx]];
+            document.getElementById('results').style.display = 'block';
+            
+            btn.disabled = false;
+            text.style.display = 'inline';
+            spinner.style.display = 'none';
+        }, 3000);
+    }
+
+    reset() {
+        document.getElementById('imagePreview').style.display = 'none';
+        document.getElementById('uploadArea').style.display = 'block';
+        document.getElementById('results').style.display = 'none';
+        document.getElementById('predictBtn').disabled = true;
+        document.getElementById('imageInput').value = '';
+    }
+
+    speak() {
+        const disease = document.getElementById('diseaseName').textContent;
+        const treatment = document.getElementById('treatmentText').textContent;
+        const speech = `${disease} है। इलाज: ${treatment}`;
+        
+        const utterance = new SpeechSynthesisUtterance(speech);
+        utterance.lang = 'hi-IN';
+        speechSynthesis.speak(utterance);
+    }
+}
+
+new CropDoctor();
