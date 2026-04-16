@@ -1,62 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Crop Doctor - Plant Disease Detection</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Agro Vision AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <div class="container">
-        <header class="header">
-            <div class="logo">
-                <span class="leaf-icon">🌿</span>
-                <h1>AI Crop Doctor</h1>
-            </div>
-            <p>भारतीय किसानों के लिए FREE पौधे की बीमारी पहचान टूल</p>
-        </header>
 
-        <div class="upload-section">
-            <div class="upload-area" id="uploadArea">
-                <div class="upload-content">
-                    <div class="upload-icon">📁</div>
-                    <h3>पत्ती की फोटो यहाँ डालें</h3>
-                    <p>या <span id="triggerFile">ब्राउज़ करें</span></p>
-                    <input type="file" id="imageInput" accept="image/*" hidden>
-                </div>
-            </div>
-            <div class="image-preview" id="imagePreview" style="display: none;">
-                <img id="previewImg" alt="Preview">
-                <button class="remove-btn" id="removeImage">✕</button>
-            </div>
-        </div>
+<header>
+  <h1>🌱 Agro Vision AI</h1>
+  <p>Smart Farming with AI & Voice</p>
+</header>
 
-        <button class="predict-btn" id="predictBtn" disabled>
-            <span>बीमारी जांचें</span>
-            <div class="spinner" id="spinner" style="display: none;"></div>
-        </button>
+<nav>
+  <a href="#">Home</a>
+  <a href="#about">About</a>
+  <a href="#services">Services</a>
+  <a href="#ai">AI Model</a>
+  <a href="#contact">Contact</a>
+</nav>
 
-        <div class="results" id="results" style="display: none;">
-            <div class="result-card">
-                <h2>निदान तैयार! ✅</h2>
-                <div class="disease-info">
-                    <div class="disease" id="diseaseName">Loading...</div>
-                    <div class="confidence" id="confidence">0%</div>
-                </div>
-                <div class="treatment">
-                    <h3>💊 इलाज और बचाव</h3>
-                    <div id="treatmentText"></div>
-                </div>
-                <div class="buttons">
-                    <button id="speakBtn">🔊 बोलें</button>
-                    <button id="newBtn">🔄 नया टेस्ट</button>
-                </div>
-            </div>
-        </div>
-    </div>
+<section class="hero">
+  <h2>Future of Agriculture</h2>
+  <p>AI + Voice + Smart Farming</p>
+  <button onclick="startVoice()">🎤 Start Voice Assistant</button>
+</section>
 
-    <script src="script.js"></script>
+<section id="about" class="section">
+  <h2>About Us</h2>
+  <p>Agro Vision is an AI-powered platform helping farmers make smart decisions using data and automation.</p>
+</section>
+
+<section id="services" class="section">
+  <h2>Our Services</h2>
+
+  <div class="card">
+    <h3>🌾 Crop Prediction</h3>
+    <p>AI suggests best crops.</p>
+  </div>
+
+  <div class="card">
+    <h3>💧 Smart Irrigation</h3>
+    <p>Save water using AI.</p>
+  </div>
+
+  <div class="card">
+    <h3>📊 Soil Analysis</h3>
+    <p>Improve soil quality.</p>
+  </div>
+
+</section>
+
+<section id="ai" class="section">
+  <h2>AI Model</h2>
+  <input type="text" id="inputData" placeholder="Enter soil type">
+  <button onclick="predict()">Predict</button>
+  <p id="result"></p>
+</section>
+
+<section id="contact" class="section">
+  <h2>Contact</h2>
+  <p>Email: agrovision@gmail.com</p>
+  <p>Phone: +91 9876543210</p>
+</section>
+
+<footer>
+  <p>© 2026 Agro Vision AI</p>
+</footer>
+
+<script src="script.js"></script>
 </body>
 </html>
